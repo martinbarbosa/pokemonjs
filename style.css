@@ -1,0 +1,25 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f0f0f0;
+}
+
+h1 {
+    color: #5d21e9;
+}
+
+#pokemonName {
+    padding: 5px;
+}
+
+#searchButton {
+    background-color: #E94421;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#pokemonInfo {
+    margin-top: 30px;
+}
