@@ -1,33 +1,84 @@
-document.getElementById("searchButton").addEventListener("click", async function () {
-    const pokemonName = document.getElementById("pokemonName").value.toLowerCase();
-
-    //Consumo la funcion que extrae la info basica del pokemon en base al nombre
-    const data = await extractPokemodDetails(pokemonName)
-    //Consumo la funcion para extraer la descripcion y la url de evolucion
-    const dataDescription = await getPokemonDescription(data.idPokemon)
-    //Consumo la tercer funcion para obtener las posibles evoluciones del pokemon
-    const pokemonEvolutions = await getEvolutions(dataDescription.evolutionChain)
-
-    //Pintamos en el front la informacion basica extraida del pokemon
-    pokemonInfo.innerHTML = `
-        <h2>${data.name}</h2>
-        <img src="${data.img}" alt="${data.name}">
-        <p>Descripción: ${dataDescription.flavorText}</p>
-        <p>Habilidades: ${data.abilities.map((ability) => ability.ability.name).join(', ')}</p>`;
-
-    console.log(pokemonEvolutions)
+document.addEventListener("DOMContentLoaded", function(){
+const boton_busqueda= document.getElementById("searchButton")
+const boton_evolution= document.getElementById("evolutionbutton")
+const boton_home= document.getElementById("homebutton")
+let pokemonName= null
 
 
-    if (data.evolutions && data.evolutions.length > 0) {
-        pokemonInfo.innerHTML += `<button id="evolutionButton">Evolucionar</button>`;
-        document.getElementById("evolutionButton").addEventListener("click", function () {
-            window.location.href = `evolution.html?pokemon=${data.evolutions[0].name}`;
-        });
-    }
+async function consultaPokemon(pokemonName){
+boton_home.style.display='block'
+//Consumo la funcion que extrae la info basica del pokemon en base al nombre
+const data = await extractPokemodDetails(pokemonName)
+//Consumo la funcion para extraer la descripcion y la url de evolucion
+const dataDescription = await getPokemonDescription(data.idPokemon)
+//Consumo la tercer funcion para obtener las posibles evoluciones del pokemon
+const pokemonEvolutions = await getEvolutions(dataDescription.evolutionChain)
+
+//Pintamos en el front la informacion basica extraida del pokemon
+pokemonInfo.innerHTML = `
+    <h2>${data.name}</h2>
+    <img src="${data.img}" alt="${data.name}">
+    <p>Descripción: ${dataDescription.flavorText}</p>
+    <p>Habilidades: ${data.abilities.map((ability) => ability.ability.name).join(', ')}</p>`;
+
+console.log(pokemonEvolutions)
+console.log(pokemonEvolutions.length)
+if(pokemonEvolutions.length> 1){
+
+    const posicionPokemon= pokemonEvolutions.indexOf(pokemonName)
+
+if (posicionPokemon+1==pokemonEvolutions.length){
+    boton_evolution.style.display='none'
+}else{
+    boton_evolution.style.display= 'flex'
+}
+
+    
+}else{
+    boton_evolution.style.display= 'none'
+}
+
+boton_evolution.addEventListener("click", async function (){
+
+evolucionarPokemon(pokemonEvolutions, pokemonName)
+
+
+})
+
+if (data.evolutions && data.evolutions.length > 0) {
+    pokemonInfo.innerHTML += `<button id="evolutionButton">Evolucionar</button>`;
+    document.getElementById("evolutionButton").addEventListener("click", function () {
+        window.location.href = `evolution.html?pokemon=${data.evolutions[0].name}`;
+    });
+}
+
+
+}
+
+
+boton_busqueda.addEventListener("click", async function () {
+     pokemonName = document.getElementById("pokemonName").value.toLowerCase();
+
+    consultaPokemon(pokemonName)
     
 });
 
+async function evolucionarPokemon(arregloEvolucion, pokemonName){
 
+const posicionPokemon= arregloEvolucion.indexOf(pokemonName)
+console.log("esta es la posicion del pokemon" + posicionPokemon+ pokemonName)
+console.log(arregloEvolucion.length)
+if (posicionPokemon+1==arregloEvolucion.length){
+    boton_evolution.style.display='none'
+}
+if (posicionPokemon+1< arregloEvolucion.length){
+    pokemonName= arregloEvolucion[posicionPokemon+1]
+consultaPokemon(pokemonName)
+    console.log(pokemonName)
+}else {
+    boton_evolution.style.display='none'
+}
+}
 //Funcion para obtener la informacion basica del pokemon
 async function extractPokemodDetails(pokemonName){
     try{
@@ -123,3 +174,5 @@ async function getEvolutions(evolutionChainUrl) {
         console.error(`fallo la petición a la api con error: ${error.message}`);
     }
 }
+
+})
