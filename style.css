@@ -1,11 +1,13 @@
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    font-size: 20px;
     text-align: center;
-    background-color: #f0f0f0;
+    background-color: #04eb04;
 }
 
 h1 {
-    color: #5d21e9;
+    color: #f3f1f7fb;
 }
 
 #pokemonName {
@@ -13,7 +15,7 @@ h1 {
 }
 
 #searchButton {
-    background-color: #E94421;
+    background-color: #081d7cfa;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -30,7 +32,7 @@ body{
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    background-color: #FFF8DC;
+    background-color: #fd430bf3;
     padding: 30px;
     margin: auto;
 }
